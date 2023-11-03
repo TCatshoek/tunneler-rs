@@ -92,7 +92,6 @@ pub fn fire_bullets(
             angle = -angle;
         }
 
-        println!("ANGLE: {}", angle);
         if keys.just_pressed(KeyCode::Space) {
 
             let direction = Vec2::from_angle(angle).rotate(Vec2::Y);
@@ -138,7 +137,6 @@ pub fn move_player(
             transform.rotation = transform.rotation.lerp(desired_rotation, dtime * movement_speed);
             transform.translation.x += direction.x * dtime * movement_speed;
             transform.translation.y += direction.y * dtime * movement_speed;
-            println!("Player pos: {}", transform.translation)
         }
     };
 }

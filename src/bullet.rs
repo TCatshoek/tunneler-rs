@@ -1,3 +1,4 @@
+use std::time::Duration;
 use bevy::prelude::*;
 use euclid::Trig;
 
@@ -6,6 +7,9 @@ use crate::physics::*;
 
 #[derive(Component)]
 struct Bullet;
+
+#[derive(Component, Deref, DerefMut)]
+struct BulletTimer(Timer);
 
 #[derive(Event)]
 pub struct BulletShootEvent {
@@ -19,9 +23,12 @@ pub struct BulletPlugin;
 impl Plugin for BulletPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Update, spawn_bullets)
+            .add_systems(Update, despawn_bullets)
             .add_event::<BulletShootEvent>();
     }
 }
+
+
 
 fn spawn_bullets(
     mut events: EventReader<BulletShootEvent>,
@@ -43,7 +50,22 @@ fn spawn_bullets(
                     ..default()
                 },
                 ..default()
-            }
+            },
+            BulletTimer(Timer::new(Duration::from_secs(5), TimerMode::Once))
         ));
+    }
+}
+
+fn despawn_bullets(
+    mut commands: Commands,
+    mut query: Query<(Entity, &mut BulletTimer), With<Bullet>>,
+    time: Res<Time>
+) {
+    for (entity, mut timer) in query.iter_mut() {
+        timer.tick(time.delta());
+
+        if timer.finished() {
+            commands.entity(entity).despawn();
+        }
     }
 }

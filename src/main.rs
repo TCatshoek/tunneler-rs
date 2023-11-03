@@ -2,6 +2,7 @@ mod player;
 mod map;
 mod bullet;
 mod physics;
+mod mouse;
 
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use player::*;
@@ -9,16 +10,20 @@ use map::*;
 
 use bevy::prelude::*;
 use bevy::window::{PresentMode, WindowTheme};
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use crate::bullet::BulletPlugin;
 use crate::physics::PhysicsPlugin;
+use crate::mouse::MousePositionPlugin;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
-        // .add_plugins(MapPlugin)
+        .add_plugins(MapPlugin)
         .add_plugins(PlayerPlugin)
         .add_plugins(BulletPlugin)
         .add_plugins(PhysicsPlugin)
+        .add_plugins(MousePositionPlugin)
+        .add_plugins(WorldInspectorPlugin::new())
         .add_systems(Startup, setup)
         .add_systems(Update, move_player)
         .add_systems(Update, camera_control)

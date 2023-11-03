@@ -60,7 +60,7 @@ pub fn update_map(
     for map in query.iter() {
         let img_handle = &map.image_handle;
         if let Some(image) = images.get_mut(img_handle) {
-            image.data.fill(random())
+            image.data.fill(0xFF)
         }
     }
 }
