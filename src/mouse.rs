@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 
 
-#[derive(Event)]
+#[derive(Event, Deref, DerefMut)]
 pub struct MouseWorldPosition(Vec2);
 
 pub struct MousePositionPlugin;

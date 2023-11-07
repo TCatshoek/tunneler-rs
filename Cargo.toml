@@ -9,6 +9,7 @@ edition = "2021"
 bevy = "0.11.3"
 bevy-inspector-egui = "0.20.0"
 euclid = "0.22.9"
+image = "0.24.7"
 rand = "0.8.5"
 
 # Enable max optimizations for dependencies, but not for our code:

@@ -3,6 +3,7 @@ mod map;
 mod bullet;
 mod physics;
 mod mouse;
+mod ImageWriter;
 
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use player::*;

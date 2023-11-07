@@ -3,6 +3,8 @@ use bevy::ecs::query::WorldQuery;
 use rand::{random, Rng};
 use bevy::prelude::*;
 use bevy::render::render_resource::{Extent3d, TextureDimension, TextureFormat};
+use crate::ImageWriter::ImageWriter;
+use crate::mouse::MouseWorldPosition;
 
 const SIZE: (u32, u32) = (512, 512);
 
@@ -44,6 +46,7 @@ pub fn init_map(
         SpriteBundle {
             sprite: Sprite {
                 custom_size: Some(Vec2::new(SIZE.0 as f32, SIZE.1 as f32)),
+                flip_y: true,
                 ..default()
             },
             texture: img_handle.clone(),
@@ -55,12 +58,26 @@ pub fn init_map(
 
 pub fn update_map(
     query: Query<&Map>,
-    mut images: ResMut<Assets<Image>>
+    mut images: ResMut<Assets<Image>>,
+    mut events: EventReader<MouseWorldPosition>
 ) {
-    for map in query.iter() {
+
+
+    let mut x = 0;
+    let mut y = 0;
+    for pos in events.iter() {
+        println!("world mouse pos: ({}, {})", pos.x, pos.y);
+        x = (SIZE.0 as f32 / 2.0 + pos.x) as u32;
+        y = (SIZE.1 as f32 / 2.0 + pos.y) as u32;
+        println!("mouse pos ({}, {})", x, y);
+    }
+
+    if let Ok(map) = query.get_single() {
         let img_handle = &map.image_handle;
         if let Some(image) = images.get_mut(img_handle) {
-            image.data.fill(0xFF)
+            image.data.fill(0xFF);
+            let mut writer = ImageWriter(image);
+            writer.put_pixel(x, y, Color::RED);
         }
     }
 }
