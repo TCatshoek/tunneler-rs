@@ -4,6 +4,10 @@ use bevy::prelude::KeyCode::Up;
 use euclid::Trig;
 use crate::bullet::BulletShootEvent;
 use crate::physics::quat_to_2d_rotation;
+use crate::pixelcollider::PixelCollider;
+
+#[derive(Component, Deref, DerefMut)]
+pub struct OGTransform(Transform);
 
 #[derive(Component)]
 pub struct Player;
@@ -69,7 +73,9 @@ pub fn setup_player(
             transform: Transform::from_xyz(0.0, 0.0, 0.0),
             ..default()
         },
-        Player
+        PixelCollider::new(),
+        Player,
+        OGTransform(Transform::from_xyz(0.0, 0.0, 0.0))
     ))
         .push_children(&[
             left_track,
@@ -108,14 +114,15 @@ pub fn fire_bullets(
     }
 }
 pub fn move_player(
-    mut query: Query<&mut Transform, With<Player>>,
+    mut query: Query<(&mut Transform, &mut OGTransform), With<Player>>,
     keys: Res<Input<KeyCode>>,
     time: Res<Time>,
 ) {
     let dtime = time.delta_seconds();
     let movement_speed = 20.0;
 
-    for (mut transform) in query.iter_mut() {
+    for (mut transform, mut og_transform) in query.iter_mut() {
+
         let mut direction = bevy::math::Vec2::splat(0.0);
 
         if keys.pressed(KeyCode::W) {
@@ -135,8 +142,18 @@ pub fn move_player(
             let desired_rotation = Quat::from_rotation_z(Vec2::Y.angle_between(direction));
 
             transform.rotation = transform.rotation.lerp(desired_rotation, dtime * movement_speed);
+
+            transform.translation.x = og_transform.translation.x;
+            transform.translation.y = og_transform.translation.y;
+
             transform.translation.x += direction.x * dtime * movement_speed;
             transform.translation.y += direction.y * dtime * movement_speed;
+
+            og_transform.translation.x = transform.translation.x;
+            og_transform.translation.y = transform.translation.y;
+
+            transform.translation.x = f32::round(transform.translation.x);
+            transform.translation.y = f32::round(transform.translation.y);
         }
     };
 }

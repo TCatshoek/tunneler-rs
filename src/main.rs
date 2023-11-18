@@ -1,30 +1,38 @@
 mod player;
-mod map;
+mod map_pixels;
 mod bullet;
 mod physics;
 mod mouse;
 mod ImageWriter;
+mod map;
+mod pixelcollider;
 
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use player::*;
-use map::*;
+use map_pixels::*;
 
 use bevy::prelude::*;
 use bevy::window::{PresentMode, WindowTheme};
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
+use bevy_prototype_lyon::prelude::*;
 use crate::bullet::BulletPlugin;
+use crate::map::setup_map;
 use crate::physics::PhysicsPlugin;
 use crate::mouse::MousePositionPlugin;
+use crate::pixelcollider::PixelColliderPlugin;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
-        .add_plugins(MapPlugin)
+        // .add_plugins(MapPlugin)
+        .add_plugins(ShapePlugin)
         .add_plugins(PlayerPlugin)
         .add_plugins(BulletPlugin)
         .add_plugins(PhysicsPlugin)
         .add_plugins(MousePositionPlugin)
+        .add_plugins(PixelColliderPlugin)
         .add_plugins(WorldInspectorPlugin::new())
+        .add_systems(Startup, setup_map)
         .add_systems(Startup, setup)
         .add_systems(Update, move_player)
         .add_systems(Update, camera_control)
