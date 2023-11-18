@@ -152,8 +152,8 @@ pub fn move_player(
             og_transform.translation.x = transform.translation.x;
             og_transform.translation.y = transform.translation.y;
 
-            transform.translation.x = f32::round(transform.translation.x);
-            transform.translation.y = f32::round(transform.translation.y);
+            // transform.translation.x = f32::round(transform.translation.x);
+            // transform.translation.y = f32::round(transform.translation.y);
         }
     };
 }

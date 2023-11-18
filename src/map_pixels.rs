@@ -67,7 +67,7 @@ pub fn update_map(
 
     let mut x = 0;
     let mut y = 0;
-    for pos in events.iter() {
+    for pos in events.read() {
         println!("world mouse pos: ({}, {})", pos.x, pos.y);
         x = (SIZE.0 as f32 / 2.0 + pos.x) as u32;
         y = (SIZE.1 as f32 / 2.0 + pos.y) as u32;
