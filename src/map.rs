@@ -152,12 +152,12 @@ pub fn update_map(
                     }
                 }
             }
-            let cur = mapdata.chunk_pos;
-            let right = chunk_grid.get(cur.0 + 1, cur.1).unwrap();
-            let r = query.get(right);
-
-            let top = chunk_grid.get(cur.0, cur.1 + 1);
-            let top_right = chunk_grid.get(cur.0 + 1, cur.1 + 1);
+            // let cur = mapdata.chunk_pos;
+            // let right = chunk_grid.get(cur.0 + 1, cur.1).unwrap();
+            // let r = query.get(right);
+            //
+            // let top = chunk_grid.get(cur.0, cur.1 + 1);
+            // let top_right = chunk_grid.get(cur.0 + 1, cur.1 + 1);
 
             *path = mapdata.to_path();
         }
