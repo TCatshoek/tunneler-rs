@@ -9,14 +9,14 @@ mod pixelcollider;
 
 use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use player::*;
-// use map_pixels::*;
+use map_pixels::*;
 
 use bevy::prelude::*;
 use bevy::window::{PresentMode, WindowTheme};
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_prototype_lyon::prelude::*;
 use crate::bullet::BulletPlugin;
-use crate::map::*;
+use crate::map::setup_map;
 use crate::physics::PhysicsPlugin;
 use crate::mouse::MousePositionPlugin;
 use crate::pixelcollider::PixelColliderPlugin;
@@ -34,7 +34,6 @@ fn main() {
         .add_plugins(WorldInspectorPlugin::new())
         .add_systems(Startup, setup_map)
         .add_systems(Startup, setup)
-        .add_systems(Update, update_map)
         .add_systems(Update, move_player)
         .add_systems(Update, camera_control)
         .add_plugins(LogDiagnosticsPlugin::default())
@@ -43,16 +42,13 @@ fn main() {
 }
 
 fn camera_control(
-    mut query: Query<(&mut OrthographicProjection, &mut Transform), With<Camera2d>>,
-    player_query: Query<&Transform, (With<Player>, Without<Camera2d>)>,
+    mut query: Query<&mut OrthographicProjection, With<Camera2d>>,
     time: Res<Time>,
     keys: Res<Input<KeyCode>>
 ) {
     let dist = time.delta().as_secs_f32();
 
-    let player_transform = player_query.single();
-
-    for (mut projection, mut transform) in query.iter_mut() {
+    for mut projection in query.iter_mut() {
         let mut log_scale = projection.scale.ln();
 
         if keys.pressed(KeyCode::PageUp) {
@@ -63,14 +59,7 @@ fn camera_control(
         }
 
         projection.scale = log_scale.exp();
-
-        transform.translation.x = player_transform.translation.x;
-        transform.translation.y = player_transform.translation.y;
-
     }
-
-
-
 }
 
 fn setup(
