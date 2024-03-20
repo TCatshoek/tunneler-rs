@@ -34,7 +34,7 @@ fn spawn_bullets(
     mut events: EventReader<BulletShootEvent>,
     mut commands: Commands,
 ) {
-    for e in events.iter() {
+    for e in events.read() {
         commands.spawn((
             Bullet,
             Velocity(e.direction.normalize_or_zero() * e.speed),

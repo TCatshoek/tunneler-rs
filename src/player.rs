@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy::math::Vec2;
-use bevy::prelude::KeyCode::Up;
+use bevy::prelude::KeyCode::ArrowUp;
 use euclid::Trig;
 use crate::bullet::BulletShootEvent;
 use crate::physics::quat_to_2d_rotation;
@@ -86,7 +86,7 @@ pub fn setup_player(
 
 pub fn fire_bullets(
     mut query: Query<&Transform, With<Player>>,
-    keys: Res<Input<KeyCode>>,
+    keys: Res<ButtonInput<KeyCode>>,
     mut events: EventWriter<BulletShootEvent>
 ) {
     for transform in query.iter() {
@@ -107,15 +107,15 @@ pub fn fire_bullets(
 
             events.send(BulletShootEvent{
                 origin: spawnpoint,
-                direction: direction,
+                direction,
                 speed: 1000.0,
-            })
+            });
         }
     }
 }
 pub fn move_player(
     mut query: Query<(&mut Transform, &mut OGTransform), With<Player>>,
-    keys: Res<Input<KeyCode>>,
+    keys: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
 ) {
     let dtime = time.delta_seconds();
@@ -125,16 +125,16 @@ pub fn move_player(
 
         let mut direction = bevy::math::Vec2::splat(0.0);
 
-        if keys.pressed(KeyCode::W) {
+        if keys.pressed(KeyCode::KeyW) {
             direction.y += 1.0;
         }
-        if keys.pressed(KeyCode::A) {
+        if keys.pressed(KeyCode::KeyA) {
             direction.x -= 1.0;
         }
-        if keys.pressed(KeyCode::S) {
+        if keys.pressed(KeyCode::KeyS) {
             direction.y -= 1.0;
         }
-        if keys.pressed(KeyCode::D) {
+        if keys.pressed(KeyCode::KeyD) {
             direction.x += 1.0
         }
 

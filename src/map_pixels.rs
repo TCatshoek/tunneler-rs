@@ -2,6 +2,7 @@ use std::process::Command;
 use bevy::ecs::query::WorldQuery;
 use rand::{random, Rng};
 use bevy::prelude::*;
+use bevy::render::render_asset::RenderAssetUsages;
 use bevy::render::render_resource::{Extent3d, TextureDimension, TextureFormat};
 use crate::ImageWriter::ImageWriter;
 use crate::mouse::MouseWorldPosition;
@@ -36,6 +37,7 @@ pub fn init_map(
         TextureDimension::D2,
         &[0, 0, 0, 255],
         TextureFormat::Rgba8Unorm,
+        RenderAssetUsages::RENDER_WORLD
     );
 
     let img_handle = images.add(img);
@@ -67,7 +69,7 @@ pub fn update_map(
 
     let mut x = 0;
     let mut y = 0;
-    for pos in events.iter() {
+    for pos in events.read() {
         println!("world mouse pos: ({}, {})", pos.x, pos.y);
         x = (SIZE.0 as f32 / 2.0 + pos.x) as u32;
         y = (SIZE.1 as f32 / 2.0 + pos.y) as u32;

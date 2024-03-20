@@ -44,7 +44,7 @@ fn main() {
 fn camera_control(
     mut query: Query<&mut OrthographicProjection, With<Camera2d>>,
     time: Res<Time>,
-    keys: Res<Input<KeyCode>>
+    keys: Res<ButtonInput<KeyCode>>
 ) {
     let dist = time.delta().as_secs_f32();
 

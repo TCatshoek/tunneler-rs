@@ -23,6 +23,6 @@ fn update_cursor_position(
 
     if let Some(position) = q_windows.single().cursor_position()
         .and_then(|cursor| camera.viewport_to_world_2d(camera_transform, cursor)) {
-        events.send(MouseWorldPosition(position))
+        events.send(MouseWorldPosition(position));
     }
 }
